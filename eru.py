@@ -26,7 +26,7 @@ class ERU(function_node.FunctionNode):
         y = x[0].copy()
         
         pos_indices = x[0] >= 0
-        y[pos_indices] = ((self.r2)*y[pos_indices] + 1)**(self.ir)-self.ir
+        y[pos_indices] = (self.r2*y[pos_indices] + 1)**self.ir - self.ir
         
         neg_indices = x[0] < 0
         y[neg_indices] = numpy.exp(self.r*y[neg_indices])-self.ir
@@ -65,10 +65,10 @@ class ERUGrad(function_node.FunctionNode):
         gx = numpy.zeros_like(x)
         
         pos_indices = x >= 0
-        gx[pos_indices] *= self.r*((self.r2)*x[pos_indices] + 1)**(self.ir - 1)
+        gx[pos_indices] = self.r*(self.r2 * x[pos_indices] + 1)**(self.ir - 1)
         
         neg_indices = x < 0
-        gx[neg_indices] *= self.r * numpy.exp(self.r*x[neg_indices])
+        gx[neg_indices] = self.r * numpy.exp(self.r*x[neg_indices])
         self.retain_inputs((0,))
         self.retain_outputs((0,))
         return gx,
@@ -78,7 +78,7 @@ class ERUGrad(function_node.FunctionNode):
         gx = cuda.elementwise(
             'T x, T r, T ir, T r2', 'T gx',
             'gx = x >= 0 ? (T) r*pow((r2*x+1),(ir-1)) : (T)(r * exp(r*x))',
-            'elu_bwd')(
+            'eru_bwd')(
                 x, self.r, self.ir, self.r2)
         self.retain_inputs((0,))
         self.retain_outputs((0,))
@@ -98,7 +98,7 @@ def eru(x, r=1.0):
     Args:
         x (:class:`~chainer.Variable` or :ref:`ndarray`):
             Input variable. A :math:`(s_1, s_2, ..., s_N)`-shaped float array.
-        alpha (float): Parameter :math:`\\alpha`. Default is 1.0.
+        r (float): Parameter. Default is 1.0.
     Returns:
         ~chainer.Variable: Output variable. A
         :math:`(s_1, s_2, ..., s_N)`-shaped float array.
