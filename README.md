@@ -4,7 +4,7 @@ See: https://arxiv.org/abs/1804.11237
 
 ## Usage
 ### ERU (exponential root unit)
-<img src="https://github.com/takyamamoto/BRU_chainer/figs/ERU.png" width=70%>
+<img src="https://github.com/takyamamoto/BRU_chainer/blob/master/figs/ERU.png" width=70%>
 
 ```
 >>> import numpy as np
@@ -20,7 +20,7 @@ array([[-0.36466473,  0.5       ],
 ```
 
 ### ORU (odd root unit)
-<img src="https://github.com/takyamamoto/BRU_chainer/figs/ORU.png" width=70%>
+<img src="https://github.com/takyamamoto/BRU_chainer/blob/master/figs/ORU.png" width=70%>
 
 ```
 >>> import numpy as np
